@@ -154,6 +154,8 @@
  document.addEventListener("click",e=>{
    const b=e.target.closest("#share-week-roster,#share-month-roster");
    if(!b||appState.page!=="team")return;
+   const status=window.NahdiScenarioDebug?.scenario;
+   if(status?.leaves?.length&&!status.generated){toast("حدد الإجازات وأنشئ جدول الشهر الجديد قبل مشاركة نسخة محدثة.");return;}
    shareRoster(b.id==="share-week-roster"?"week":"month",b);
  });
  // Debug exports expose no private state, only test routines with synthetic demo data.
