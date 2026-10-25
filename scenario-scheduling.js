@@ -2,17 +2,8 @@
 /* NahdiCare PRE-PLANNED leave-first rota optimizer. Simulation only, not an HR system. */
 (()=>{
  const scenario={leaves:[],swaps:[],report:null,generated:false,revision:0,open:false,initial:null};
- const ROLES=[
-  ["off","m1","m1","m1","m1","m1","m1"],
-  ["m2","m2","off","m2","m2","m2","m2"],
-  ["m2","m2","m2","off","m2","m2","m2"],
-  ["n","off","n","n","n","n","n"],
-  ["off","e1","e1","e1","e1","e1","e1"],
-  ["e2","n","off","e2","e2","e2","e2"],
-  ["e3","e3","e3","off","e3","e3","e3"],
-  ["e1","e1","e1","e1","off","e1","e1"],
-  ["e3","e3","e3","e3","e3","off","e3"]
- ];
+ const ROLES=window.NahdiShiftRules.templates[0];
+ const rolesForWeek=w=>window.NahdiShiftRules.rolesForWeek(w);
  const isWork=k=>k&&k!=="off"&&k!=="al"&&Boolean(types[k]?.start);
  function hour(t){const [clock,ap]=t.split(" "),[h,m]=clock.split(":").map(Number);return h%12+(ap==="PM"?12:0)+m/60}
  const start=k=>hour(types[k].start),end=k=>hour(types[k].end)+(hour(types[k].end)<=hour(types[k].start)?24:0);
@@ -22,7 +13,7 @@
  const previous=()=>scenario.initial||{};
  const init=()=>{if(!scenario.initial)scenario.initial={...appState.overrides}};
  function baseline(day){
-  const codes=ROLES.map(r=>r[(day-1)%7]);
+  const codes=rolesForWeek(weekNum(day)).map(r=>r[(day-1)%7]);
   return {
     morning:codes.filter(c=>c==="m1"||c==="m2").length,
     evening:codes.filter(c=>c[0]==="e").length,
@@ -35,7 +26,7 @@
   for(let dow=0;dow<7;dow++){
    const day=week*7+dow+1;
    if(!leaveOn(p,day))continue;
-   const code=ROLES[role][dow];if(!isWork(code))continue;
+   const code=rolesForWeek(week)[role][dow];if(!isWork(code))continue;
    const totals=baseline(day);
    if(code[0]==="m")missing+=totals.morning<=2?28000:340;
    else if(code==="n")missing+=totals.night<=1?38000:180;
@@ -49,13 +40,14 @@
  function assignWeek(week,last,hist){
   const costs=Array.from({length:9},()=>Array(9).fill(Infinity));
   for(let role=0;role<9;role++)for(let p=0;p<9;p++){
-   if(last&&!rest(last[p],ROLES[role][0]))continue;
+   if(last&&!rest(last[p],rolesForWeek(week)[role][0]))continue;
+   if(last&&hist[p].streak+rolesForWeek(week)[role].indexOf("off")>8)continue;
    const h=hist[p];let fairness=0;
-   if(role===3)fairness+=h.night*26;
-   else if(role===5)fairness+=h.nightRelief*22+h.night*10;
-   else if(role<3)fairness+=h.morning*11;
+   if(role===0)fairness+=h.night*26;
+   else if(role===1)fairness+=h.nightRelief*22+h.night*10;
+   else if(role===2||role===3||role===4)fairness+=h.morning*11;
    else fairness+=h.evening*5;
-   const category=role<3?"m":role===3?"n":"e";
+   const category=role===0||role===1?"n":role<=4?"m":"e";
    if(h.prevRole===role)fairness+=4;
    if(h.prevCategory&&h.prevCategory!==category)fairness+=3;
    costs[role][p]=fairness+penalty(p,role,week)+(p*13+role*7+week*11)%19*.001;
@@ -85,7 +77,7 @@
    const p=allWeeks[w][role];
    for(let dow=0;dow<7;dow++){
     const day=w*7+dow+1;
-    matrix[p][day-1]=leaveOn(p,day)?"al":ROLES[role][dow];
+    matrix[p][day-1]=leaveOn(p,day)?"al":rolesForWeek(w)[role][dow];
    }
   }
   return matrix;
@@ -101,9 +93,9 @@
    const pediatrics=x.filter(c=>c==="e1").length;
    const off=x.filter(c=>c==="off").length,annual=x.filter(c=>c==="al").length;
    const lacks=[];
-   if(morning<2)lacks.push("صباحي "+(2-morning));
+   if(morning!==2)lacks.push("صباحي "+(morning<2?"نقص "+(2-morning):"زيادة "+(morning-2)));
    if(evening<3)lacks.push("مسائي "+(3-evening));
-   if(night<1)lacks.push("ليلي "+(1-night));
+   if(night!==1)lacks.push("ليلي "+(night<1?"نقص "+(1-night):"زيادة "+(night-1)));
    if(weekday===5&&pediatrics<2)lacks.push("أطفال الجمعة "+(2-pediatrics));
    if(off>2&&annual===0)lacks.push("تكدس OFF");
    daily.push({day,morning,evening,night,off,annual,pediatrics,lacks});
@@ -120,7 +112,7 @@
   return {daily,gaps,restProblems,hours,hasGaps:gaps.length>0};
  }
  function assignInitial(){
-  const hist=Array.from({length:9},()=>({morning:0,evening:0,night:0,nightRelief:0,prevRole:null,prevCategory:null}));
+  const hist=Array.from({length:9},()=>({morning:0,evening:0,night:0,nightRelief:0,prevRole:null,prevCategory:null,streak:0}));
   const plans=[];let last=null;
   for(let w=0;w<5;w++){
    const result=assignWeek(w,last,hist);
@@ -130,11 +122,13 @@
    last=Array(9).fill("off");
    for(let role=0;role<9;role++){
     const p=assigned[role],h=hist[p],category=role<3?"m":role===3?"n":"e";
-    if(role<3)h.morning++;
-    else if(role===3)h.night++;
+    if(role===0)h.night++;
+    else if(role===1)h.nightRelief++;
+    else if(role<=4)h.morning++;
     else h.evening++;
-    if(role===5)h.nightRelief++;
-    h.prevRole=role;h.prevCategory=category;last[p]=ROLES[role][6];
+    h.prevRole=role;h.prevCategory=category;last[p]=rolesForWeek(w)[role][6];
+    let tail=0;for(let d=6;d>=0&&rolesForWeek(w)[role][d]!=="off";d--)tail++;
+    h.streak=tail;
    }
   }
   const matrix=matrixFromAssignments(plans);
@@ -207,7 +201,7 @@
   const title=missing.length?"⚠ "+missing.length+" يومًا فيه عجز":"✓ تغطية كاملة وفق الحدود الدنيا المعرفة";
   const success=missing.length?"scenario-alert":"scenario-good";
   let html='<div class="'+success+'"><b>'+title+'</b><p>'+
-   'الشفتات تُبنى بعد احتساب الإجازات، وليس بإزالة موظف من جدول جاهز. الفحص: صباحي 2، مسائي 3، ليلي 1، والجمعة موظفان من 1 إلى 9 مساءً.</p></div>';
+   'الشفتات تُبنى بعد احتساب الإجازات، وليس بإزالة موظف من جدول جاهز. الفحص: صباحي 2 بالضبط، ليلي 1 بالضبط، والباقي مساءً، والجمعة موظفان من 1 إلى 9 مساءً.</p></div>';
   html+='<div class="scenario-kpis">'+
    '<div><strong>'+scenario.leaves.length+'</strong><small>خطط إجازة أدخلت مسبقًا</small></div>'+
    '<div><strong>'+audit.gaps.length+'</strong><small>أيام غير مكتملة</small></div>'+

@@ -1,5 +1,5 @@
-const CACHE='nahdicare-staff-demo-app-v9';
-const ASSETS=['./','./index.html','./style.css','./premium.css','./native.css','./app.js','./premium.js','./native.js','./manifest.webmanifest','./roster-v2.css','./roster-v2.js','./brand-official.css','./brand-official.js','./official-symbol.b64','./share-roster.js','./share-roster.css','./scenario-scheduling.js','./scenario-scheduling.css','./coverage-roster.js','./coverage-roster.css','./fixed-tabs.js','./fixed-tabs.css','./apple-touch-icon.png','./icon-192.png','./icon-512.png'];
+const CACHE='nahdicare-staff-demo-app-v10';
+const ASSETS=['./','./index.html','./style.css','./premium.css','./native.css','./app.js','./premium.js','./native.js','./manifest.webmanifest','./roster-v2.css','./roster-v2.js','./brand-official.css','./brand-official.js','./official-symbol.b64','./share-roster.js','./share-roster.css','./staffing-rules.js','./scenario-scheduling.js','./scenario-scheduling.css','./coverage-roster.js','./coverage-roster.css','./fixed-tabs.js','./fixed-tabs.css','./apple-touch-icon.png','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()));
 });
