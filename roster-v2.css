@@ -1,0 +1,94 @@
+
+/* Approved compact-app design: single-column mobile content and legible schedules */
+.brand-lockup{margin-bottom:22px}
+.brand-lockup img{
+ display:block;width:min(100%,290px);height:auto;max-height:108px;object-fit:contain;
+ margin:auto;filter:drop-shadow(0 0 12px #1677ba28)
+}
+.brand-logo img{width:40px;height:40px;object-fit:contain;display:block}
+.mobile-brand-icon img{width:39px;height:39px;object-fit:contain}
+.brand-logo{background:none;border:0}
+.brand-mobile{min-width:43px}
+.roster-card{padding:19px}
+.roster-card .weekscroller{direction:ltr;border-radius:17px;border:1px solid #37779f;background:#082440}
+.roster-card .calendar-table{width:100%;border-spacing:4px;min-width:825px;padding:7px}
+.roster-card .calendar-table.monthly{min-width:3000px}
+.roster-card .calendar-table.weekly{min-width:900px}
+.roster-card .calendar-table th{height:58px;line-height:1.6;font-size:11px;border-radius:7px;color:#d3ebfb}
+.roster-card .calendar-table th:first-child,
+.roster-card .calendar-table td:first-child{position:sticky;left:0;z-index:3;background:#0d3559;border:0;
+ text-align:left;min-width:142px;max-width:142px;width:142px;box-shadow:2px 0 6px #051d34a9;
+ padding:9px 8px;direction:ltr;white-space:normal}
+.roster-card .calendar-table th:first-child{z-index:4;text-align:center}
+.roster-card .calendar-table td:not(:first-child){min-width:91px}
+.roster-card .calendar-table .name-cell{font-weight:700;font-size:12px;line-height:1.4;color:#f4faff}
+.roster-card .shiftcell{border-radius:10px;min-height:83px;display:flex;justify-content:center;align-items:center;flex-direction:column;
+ text-align:center;padding:8px 4px;gap:5px}
+.roster-card .shiftcell strong{font-size:11px}
+.roster-card .shiftcell small{font-size:10px;font-weight:700}
+.roster-card .shiftcell.morning{background:#65d4c9;color:#114454}
+.roster-card .shiftcell.evening{background:#f5c273;color:#5a3b12}
+.roster-card .shiftcell.night{background:#b2a7e4;color:#322852}
+.roster-card .shiftcell.off{background:#a9c9dc;color:#28506b}
+.roster-card .shiftcell.leave{background:#f4a5ad;color:#673b44}
+.roster-card .shiftcell small.date-time{direction:ltr;unicode-bidi:isolate;font-size:10px;white-space:nowrap}
+.day-switch{display:flex;gap:9px;align-items:center;justify-content:center;margin:10px 0 17px}
+.day-switch .pill{white-space:normal;text-align:center;padding:10px 14px;font-size:11px}
+.week-guide{font-size:10px;line-height:1.6;margin:5px 0 12px;color:#b5d4e4}
+.notice-safe{border:1px solid #426f8f;border-radius:12px;padding:12px 14px;background:#082c4a;font-size:10px;color:#c3ddec;line-height:1.8;margin:14px 0}
+.award-layout{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+.official-award{padding:20px 14px;min-height:475px}
+.official-award .award-trophy{font-size:56px}
+.official-award .photo{width:112px;height:112px;font-size:45px}
+.official-award h2{font-size:22px}
+.performance-panel{padding:19px}
+.performance-item{display:flex;align-items:center;gap:10px;padding:15px 0;border-bottom:1px solid #3860807a}
+.performance-item .metric-icon{font-size:20px;color:#48cfff;display:grid;place-items:center;
+ width:38px;height:38px;flex-shrink:0;background:#0f4b76;border:1px solid #237aa8;border-radius:9px}
+.performance-item>div{flex:1;min-width:0}
+.performance-item b{display:block;font-size:12px}
+.performance-item small{display:block;font-size:10px;color:#91b8d0;direction:ltr;text-align:right}
+.performance-item .metric-empty{font:750 17px Inter;color:#a2cde7}
+.content .grid.g2:has(.leave-form){grid-template-columns:minmax(0,1fr)}
+.content .grid.g2:has(.leave-form)>.card{min-width:0}
+.content .grid.g2:has(.month-picker)>.card:first-child{order:0}
+.content .grid.g2:has(.month-picker)>.card:last-child{order:1}
+.month-picker{max-width:100%;direction:ltr;grid-template-columns:repeat(7,minmax(0,1fr))}
+.month-picker .day{height:47px;min-width:0;line-height:1.35}
+.month-picker .day small{font-size:9px}
+.month-nav{gap:10px}
+.month-nav button{min-width:39px;min-height:39px}
+.periodrow .period-title{flex-wrap:wrap}
+.inputbox{min-width:0}
+.inputbox input[type=date]{font-size:12px;font-family:Inter,Arial,sans-serif;max-width:100%;min-width:0}
+.formrow{min-width:0}
+.award-layout,.roster-card,.leave-form{max-width:100%}
+@media(max-width:850px){
+ .award-layout{grid-template-columns:minmax(0,1fr)}
+ .official-award{min-height:390px;margin:0 auto;width:100%;max-width:420px}
+ .official-award .award-trophy{font-size:51px}
+ .performance-item{padding:12px 0}
+ .content .grid.g2:has(.month-picker){grid-template-columns:minmax(0,1fr)!important}
+ .content .grid.g2:has(.month-picker)>.card{min-width:0;width:100%}
+ .roster-card{padding:12px}
+ .roster-card .calendar-table.weekly{min-width:795px}
+ .roster-card .calendar-table td:not(:first-child){min-width:88px}
+ .roster-card .calendar-table th:first-child,.roster-card .calendar-table td:first-child{
+  min-width:124px;max-width:124px;width:124px;font-size:10.5px}
+ .roster-card .shiftcell{min-height:82px}
+ .pagehead h1{line-height:1.35}
+ .pagehead>div{min-width:0}
+ .seg{max-width:100%;display:flex;justify-content:space-between}
+ .seg button{flex:1;min-width:0;font-size:10px;padding:10px 6px}
+ .week-guide{font-size:10px}
+ .formrow{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ .periodrow{padding:12px}
+ .periodrow input[type=date]{padding:9px 5px}
+ .performance-panel h3{font-size:16px}
+ .award-layout .award{box-shadow:inset 0 0 50px #eebc5210,0 12px 25px #0004}
+}
+@media(max-width:380px){
+ .roster-card .calendar-table th:first-child,.roster-card .calendar-table td:first-child{min-width:110px;max-width:110px;width:110px}
+ .day-switch .pill{font-size:10px;padding:9px}
+ .formrow{grid-template-columns:minmax(0,1fr)}
+}
