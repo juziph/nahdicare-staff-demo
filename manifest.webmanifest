@@ -1,0 +1,32 @@
+{
+  "id": "./",
+  "name": "NahdiCare Staff | موظفو النهدي كير",
+  "short_name": "NahdiCare",
+  "description": "معاينة تفاعلية لتطبيق موظفي عيادات النهدي كير — بيانات تجريبية فقط",
+  "start_url": "./?source=homescreen",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#06172e",
+  "theme_color": "#06172e",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "business",
+    "productivity"
+  ]
+}
