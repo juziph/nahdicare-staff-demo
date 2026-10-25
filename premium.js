@@ -28,3 +28,14 @@ homePage=function(){
 };
 render();
 const previewRole=new URLSearchParams(location.search).get('demo');if(['owner','manager','staff'].includes(previewRole))login(previewRole);
+
+const roleList=document.querySelector(".role-list");
+if(roleList){
+ let selectedRole="owner";
+ roleList.innerHTML='<div class="choose-label">الدخول بحساب تجريبي | Demo Account</div><div class="role-switch"><button type="button" class="active" data-demoselect="owner">يوسف</button><button type="button" data-demoselect="manager">مدير العيادة</button><button type="button" data-demoselect="staff">موظف</button></div><button type="button" class="login-enter" id="premium-enter">تسجيل الدخول <span>Login</span></button>';
+ roleList.querySelectorAll("[data-demoselect]").forEach(btn=>btn.onclick=()=>{
+  selectedRole=btn.dataset.demoselect;
+  roleList.querySelectorAll("[data-demoselect]").forEach(x=>x.classList.toggle("active",x===btn));
+ });
+ document.getElementById("premium-enter").onclick=()=>login(selectedRole);
+}

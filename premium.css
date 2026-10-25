@@ -189,3 +189,13 @@ body{background:radial-gradient(ellipse at 82% 0%,#124d8280,transparent 36%),rad
 .premium-award-banner b{font-size:12px}
 .premium-award-banner small{font-size:10px}
 }
+
+.role-list{margin-top:18px;display:block}
+.choose-label{color:#c2d9ee;font-size:11px;font-weight:700;margin-bottom:10px}
+.role-switch{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:4px;border:1px solid #2c5d83;border-radius:11px;background:#0a2a48}
+.role-switch button{border:0;border-radius:8px;background:transparent;color:#b3cfe3;padding:10px 5px;font-weight:750;font-size:11px;min-height:42px}
+.role-switch button.active{background:linear-gradient(130deg,#155c8d,#138ad1);color:#fff;box-shadow:0 0 14px #238bdf45}
+.login-enter{display:flex;gap:6px;flex-direction:column;align-items:center;justify-content:center;width:100%;margin-top:13px;border:1px solid #48baff;border-radius:11px;background:linear-gradient(100deg,#0787e9,#0b64df);box-shadow:0 10px 25px #087ad547,inset 0 1px #74d1ff44;color:#fff;min-height:55px;font-weight:800;font-size:15px}
+.login-enter span{font-weight:600;font-size:10px;font-family:Inter,Arial,sans-serif}
+.login-enter:active{filter:brightness(1.15)}
+@media(max-width:850px){.choose-label{font-size:12px}.role-switch button{font-size:12px}.login-enter{font-size:16px}}
